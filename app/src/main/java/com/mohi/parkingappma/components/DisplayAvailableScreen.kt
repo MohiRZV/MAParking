@@ -19,10 +19,9 @@ fun DisplayAvailableScreen(
     onTakeClick : (Entity) -> Unit
 ) {
     val loading by remember { viewModel.loading }
-    viewModel.getFree()
     val listOfEntities by remember { viewModel.listOfFreeEntities }
 
-    Box(modifier = Modifier) {
+    Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
         LazyColumn {
             items(listOfEntities) { item ->
                 val rememberState = remember { mutableStateOf(true) }
@@ -34,8 +33,8 @@ fun DisplayAvailableScreen(
                     )
             }
         }
-        CircularIndeterminateProgressBar(isDisplayed = loading)
     }
+    CircularIndeterminateProgressBar(isDisplayed = loading)
 }
 
 @ExperimentalMaterialApi
@@ -57,15 +56,28 @@ fun SingleAvailableEntityItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = entity.number
-            )
-            Button(modifier = Modifier.padding(start = 150.dp), onClick = {
-                onClick(entity)
-                state.value = false
-            }) {
-                Box(modifier = Modifier) {
-                    Text(text = "Take")
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Text(text = "number: ${entity.number}")
+                    Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                    Text(text = "count: ${entity.count}")
+                }
+                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Text(text = "address: ${entity.address}")
+                    Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                    Text(text = "status: ${entity.status}")
+                }
+                Button(modifier = Modifier, onClick = {
+                    onClick(entity)
+                    state.value = false
+                }) {
+                    Box(modifier = Modifier) {
+                        Text(text = "Take")
+                    }
                 }
             }
         }

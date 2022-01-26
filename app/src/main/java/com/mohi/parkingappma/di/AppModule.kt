@@ -1,7 +1,11 @@
 package com.mohi.parkingappma.di
 
+import com.mohi.parkingappma.MainActivity
 import com.mohi.parkingappma.model.repo.BaseEntitiesRepository
 import com.mohi.parkingappma.model.repo.EntitiesRepository
+import com.mohi.parkingappma.model.repo.localrepo.EntityDao
+import com.mohi.parkingappma.model.repo.localrepo.LocalDatabase
+import com.mohi.parkingappma.model.repo.localrepo.LocalEntitiesRepository
 import com.mohi.parkingappma.model.service.EntitiesService
 import com.mohi.parkingappma.model.usecase.*
 import dagger.Binds
@@ -33,6 +37,11 @@ class AppModule {
         return retrofit.create(EntitiesService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesEntityDao(): EntityDao {
+        return LocalDatabase.getDatabase(MainActivity.instance.applicationContext).entityDao()
+    }
 
     @Module
     @InstallIn(SingletonComponent::class)
@@ -62,6 +71,9 @@ class AppModule {
         @Singleton
         fun provideTakeUseCase(uc: BaseTakeUseCase): TakeUseCase
 
+        @Binds
+        @Singleton
+        fun provideSyncUseCase(uc: BaseSyncUseCase): SyncUseCase
     }
 
 }

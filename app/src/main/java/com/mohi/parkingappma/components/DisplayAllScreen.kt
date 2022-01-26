@@ -1,5 +1,6 @@
 package com.mohi.parkingappma.components
 
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -20,10 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mohi.parkingappma.model.domain.Entity
 import com.mohi.parkingappma.model.viewmodel.EntitiesViewModel
+import com.mohi.parkingappma.utils.InternetStatus
+import com.mohi.parkingappma.utils.InternetStatusLive
 
 @ExperimentalMaterialApi
 @Composable
@@ -36,7 +40,9 @@ fun DisplayAllScreen(
     val loading by remember { viewModel.loading }
     val listOfEntities by remember { viewModel.listOfEntities }
 
-    Box(modifier = Modifier) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
         LazyColumn {
             items(listOfEntities) { item ->
                 val dismissState = rememberDismissState()
@@ -112,15 +118,32 @@ fun DisplayAllScreen(
         ) {
             Text(text = "Add")
         }
+        val context = LocalContext.current
         Button(
-            onClick = { onSwitchToUserView() },
-            modifier = Modifier.align(Alignment.BottomStart).padding(25.dp)
+            onClick = {
+
+                if (InternetStatusLive.status.value == InternetStatus.ONLINE)
+                    onSwitchToUserView()
+                else
+                    Toast.makeText(context, "Only available online!", Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(end = 25.dp, bottom = 25.dp)
         ) {
             Text(text = "UserView")
         }
+
         Button(
-            onClick = { onSwitchToStatsView() },
-            modifier = Modifier.align(Alignment.BottomCenter).padding(25.dp)
+            onClick = {
+                if (InternetStatusLive.status.value == InternetStatus.ONLINE)
+                    onSwitchToStatsView()
+                else
+                    Toast.makeText(context, "Only available online!", Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(start = 25.dp, end = 25.dp, bottom = 25.dp)
         ) {
             Text(text = "StatsView")
         }
@@ -139,14 +162,21 @@ fun SingleEntityItem(
             .fillMaxWidth(),
         elevation = 8.dp
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(
-                text = entity.number
-            )
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                Text(text = "number: ${entity.number}")
+                Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                Text(text = "count: ${entity.count}")
+            }
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                Text(text = "address: ${entity.address}")
+                Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                Text(text = "status: ${entity.status}")
+            }
         }
     }
 }

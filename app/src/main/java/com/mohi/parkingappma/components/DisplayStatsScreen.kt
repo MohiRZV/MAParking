@@ -20,7 +20,6 @@ fun DisplayStatsScreen(
     viewModel: EntitiesViewModel = hiltViewModel()
 ) {
     val loading by remember { viewModel.loading }
-    viewModel.getTop()
     val listOfEntities by remember { viewModel.listOfTopEntities }
 
     Box(modifier = Modifier) {
@@ -30,10 +29,9 @@ fun DisplayStatsScreen(
                     entity = item
                 )
             }
-
         }
-        CircularIndeterminateProgressBar(isDisplayed = loading)
     }
+    CircularIndeterminateProgressBar(isDisplayed = loading)
 }
 
 @ExperimentalMaterialApi
@@ -47,14 +45,21 @@ fun SingleStatsEntityItem(
             .fillMaxWidth(),
         elevation = 8.dp
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(
-                text = entity.number
-            )
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                Text(text = "number: ${entity.number}")
+                Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                Text(text = "count: ${entity.count}")
+            }
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                Text(text = "address: ${entity.address}")
+                Spacer(modifier = Modifier.padding(start = 25.dp, end = 25.dp))
+                Text(text = "status: ${entity.status}")
+            }
         }
     }
 }
