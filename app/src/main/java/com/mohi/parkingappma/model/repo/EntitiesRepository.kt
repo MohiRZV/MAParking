@@ -8,6 +8,8 @@ interface EntitiesRepository {
     suspend fun getAll(): List<Entity>
     suspend fun delete(id: Int): Entity
     suspend fun add(entity: Entity): Entity
+    suspend fun take(id: Int): Entity
+    suspend fun free(): List<Entity>
 }
 
 class BaseEntitiesRepository @Inject constructor(
@@ -23,5 +25,13 @@ class BaseEntitiesRepository @Inject constructor(
 
     override suspend fun add(entity: Entity): Entity {
         return service.add(entity)
+    }
+
+    override suspend fun take(id: Int): Entity {
+        return service.take(id)
+    }
+
+    override suspend fun free(): List<Entity> {
+        return service.free()
     }
 }

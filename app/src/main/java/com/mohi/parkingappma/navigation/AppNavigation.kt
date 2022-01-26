@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mohi.parkingappma.components.AddEntityScreen
 import com.mohi.parkingappma.components.DisplayAllScreen
+import com.mohi.parkingappma.components.DisplayAvailableScreen
+import com.mohi.parkingappma.components.DisplayStatsScreen
 import com.mohi.parkingappma.model.viewmodel.EntitiesViewModel
 
 @ExperimentalMaterialApi
@@ -24,6 +26,12 @@ fun AppNavigation(
             DisplayAllScreen(
                 onClick = {
                     navController.navigate(Screen.Screen2.route)
+                },
+                onSwitchToUserView = {
+                    navController.navigate(Screen.Screen3.route)
+                },
+                onSwitchToStatsView = {
+                    navController.navigate(Screen.Screen4.route)
                 }
             )
         }
@@ -35,6 +43,21 @@ fun AppNavigation(
                     viewModel.add(number, address, status, count)
                     navController.navigate(Screen.Screen1.route)
                 }
+            )
+        }
+        composable(
+            route = Screen.Screen3.route
+        ) {
+            DisplayAvailableScreen(
+                onTakeClick = {
+                    viewModel.take(it)
+                }
+            )
+        }
+        composable(
+            route = Screen.Screen4.route
+        ) {
+            DisplayStatsScreen(
             )
         }
     }

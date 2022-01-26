@@ -13,4 +13,11 @@ interface EntitiesService {
 
     @POST("/space")
     suspend fun add(@Body entity: Entity): Entity
+
+    @FormUrlEncoded
+    @POST("/take")
+    suspend fun take(@Field("id")id: Int): Entity
+
+    @GET("/free")
+    suspend fun free(): List<Entity>
 }

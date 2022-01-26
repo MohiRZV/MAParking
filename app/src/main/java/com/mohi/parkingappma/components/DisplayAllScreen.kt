@@ -29,7 +29,9 @@ import com.mohi.parkingappma.model.viewmodel.EntitiesViewModel
 @Composable
 fun DisplayAllScreen(
     viewModel: EntitiesViewModel = hiltViewModel(),
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onSwitchToUserView: () -> Unit,
+    onSwitchToStatsView: () -> Unit
 ) {
     val loading by remember { viewModel.loading }
     val listOfEntities by remember { viewModel.listOfEntities }
@@ -103,10 +105,24 @@ fun DisplayAllScreen(
         }
         CircularIndeterminateProgressBar(isDisplayed = loading)
         FloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(25.dp),
             onClick = { onClick() }
         ) {
             Text(text = "Add")
+        }
+        Button(
+            onClick = { onSwitchToUserView() },
+            modifier = Modifier.align(Alignment.BottomStart).padding(25.dp)
+        ) {
+            Text(text = "UserView")
+        }
+        Button(
+            onClick = { onSwitchToStatsView() },
+            modifier = Modifier.align(Alignment.BottomCenter).padding(25.dp)
+        ) {
+            Text(text = "StatsView")
         }
     }
 }

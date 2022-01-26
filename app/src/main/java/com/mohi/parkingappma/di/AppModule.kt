@@ -54,6 +54,14 @@ class AppModule {
         @Singleton
         fun provideDeleteUseCase(uc: BaseDeleteEntityUseCase): DeleteEntityUseCase
 
+        @Binds
+        @Singleton
+        fun provideGetFreeUseCase(uc: BaseGetFreeUseCase): GetFreeUseCase
+
+        @Binds
+        @Singleton
+        fun provideTakeUseCase(uc: BaseTakeUseCase): TakeUseCase
+
     }
 
 }
