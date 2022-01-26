@@ -24,25 +24,12 @@ interface EntitiesRepository {
 class BaseEntitiesRepository @Inject constructor(
     private val service: EntitiesService
 ) : EntitiesRepository {
-    private var retrieved = true
+    private var retrieved = false
     private val localRepo = LocalEntitiesRepository(LocalDatabase.getDatabase(MainActivity.instance.applicationContext).entityDao())
     override suspend fun getAll(): List<Entity> {
         return if(InternetStatusLive.status.value?.equals(InternetStatus.OFFLINE) == true || retrieved) {
-            retrieved = false
             localRepo.getAll()
         } else {
-            localRepo.getAll().forEach { entity ->
-                if(entity.isLocal) {
-                    try {
-                        if (entity.wasDeleted)
-                            service.delete(entity.id)
-                        else
-                            service.add(entity)
-                    } catch (ex: HttpException) {
-                        //not relevant here
-                    }
-                }
-            }
             var entities : List<Entity> = listOf()
             try {
                 entities = service.getAll()
